@@ -1,6 +1,14 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import './Home.css';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonAlert,
+} from "@ionic/react";
+import ExploreContainer from "../components/ExploreContainer";
+import "./Home.css";
 
 const Home: React.FC = () => {
   return (
@@ -11,12 +19,20 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer />
+        <div className="container">
+          <div className="center-content">
+            <IonButton className="button" id="present-alert">
+              Click Me
+            </IonButton>
+            <IonAlert
+              trigger="present-alert"
+              header="Alert"
+              subHeader="Important message"
+              message="This is an alert!"
+              buttons={["OK"]}
+            ></IonAlert>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );
