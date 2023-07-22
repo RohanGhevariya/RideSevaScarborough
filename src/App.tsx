@@ -1,5 +1,11 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import {
+  IonApp,
+  IonRouterOutlet,
+  IonTabBar,
+  IonTabs,
+  setupIonicReact,
+} from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
 import RideManagement from "./pages/RideManagement";
@@ -27,18 +33,21 @@ import "./theme/variables.css";
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home" component={Home}></Route>
-        <Route exact path="/ride" component={RideManagement}></Route>
-        <Route exact path="/yuvako" component={Yuvako}></Route>
-        <Route exact path="/sarthi" component={Sarthi}></Route>
-        <Route exact path="/assignRide" component={AssignRide}></Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Redirect exact path="/" to="/home" />
+          <Route exact path="/home" component={Home}></Route>
+          <Route exact path="/ride" component={RideManagement}></Route>
+          <Route exact path="/yuvako" component={Yuvako}></Route>
+          <Route exact path="/sarthi" component={Sarthi}></Route>
+          <Route exact path="/assignRide" component={AssignRide}></Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;

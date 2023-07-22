@@ -1,6 +1,8 @@
 import {
+  IonBackButton,
   IonBackdrop,
   IonButton,
+  IonButtons,
   IonCol,
   IonContent,
   IonGrid,
@@ -19,6 +21,9 @@ const RideManagement: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Ride Management</IonTitle>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">

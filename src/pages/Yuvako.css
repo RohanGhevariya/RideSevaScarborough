@@ -1,12 +1,16 @@
-.container {
+.containerYuvako {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: aliceblue;
+    --background-color: #D9D9D9;
   }
   .center-content {
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+  .lableDate{
+    margin-right: 10px;
+    --color: aqua;
   }

@@ -1,8 +1,15 @@
 import {
+  IonBackButton,
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonInput,
+  IonItem,
+  IonLabel,
   IonPage,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -14,12 +21,29 @@ const Yuvako: React.FC = () => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Yuvako</IonTitle>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <div className="container">
+        <div className="containerYuvako">
+          <IonItem>
+            <IonLabel className="lableDate"> Sabha Date:</IonLabel>
+            <IonLabel> </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel className="lableDate"> House</IonLabel>
+            <IonItem>
+              <IonSelect aria-label="Favorite Fruit" value="hariprerit">
+                <IonSelectOption value="hariprerit">Hariprerit</IonSelectOption>
+                <IonSelectOption value="dasatva">Dasatva</IonSelectOption>
+                <IonSelectOption value="all">All</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+          </IonItem>
           <div className="center-content">
-            <IonButton routerLink="/sarthi">Go to Sarthi</IonButton>
+            {/* <IonButton routerLink="/sarthi">Go to Sarthi</IonButton> */}
           </div>
         </div>
       </IonContent>
