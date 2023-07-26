@@ -20,6 +20,8 @@ import {
   IonSelectOption,
   IonInput,
   IonDatetime,
+  IonBackButton,
+  IonButtons,
 } from "@ionic/react";
 
 const Sarthi: React.FC = () => {
@@ -68,6 +70,9 @@ const Sarthi: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
           <IonTitle>Sarthi</IonTitle>
         </IonToolbar>
       </IonHeader>
