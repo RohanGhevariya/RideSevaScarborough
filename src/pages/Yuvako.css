@@ -1,6 +1,7 @@
 
-  .ion-item {
+  ion-item {
     --padding-start: 10px;
+    align-items:center;
   }
   .box-yuvako{
     width: "100%";
@@ -17,4 +18,10 @@
   .card-grid {
     display: flex;
     justify-content: flex-start;
+  }
+
+  ion-avatar {
+    --border-radius: 20px;
+    height: 70px;
+    width: 70px;
   }

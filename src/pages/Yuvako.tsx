@@ -1,5 +1,6 @@
 import {
   IonAlert,
+  IonAvatar,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -34,6 +35,7 @@ import React, { useState } from "react";
 import "./Yuvako.css";
 import { checkmark } from "ionicons/icons";
 import { useEffect } from "react";
+import jsonData from "../assets/fakeData.json";
 
 const alertHandle = () => {
   console.log("alert");
@@ -46,10 +48,10 @@ const Yuvako: React.FC = () => {
   const [selectedHouse, setSelectedHouse] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const handleAttendingChange = (participantId: number, value: string) => {
+  const handleAttendingChange = (participantId: string, value: string) => {
     setParticipants((prevParticipants) =>
       prevParticipants.map((participant) =>
-        participant.id === participantId
+        participant.guid === participantId
           ? { ...participant, attending: value }
           : participant
       )
@@ -79,30 +81,13 @@ const Yuvako: React.FC = () => {
     window.location.reload(); // Reload the page
   };
 
-  const [participants, setParticipants] = useState([
-    {
-      id: 1,
-      name: "Rohan Ghevariya",
-      house: "Hariprerit",
-      attending: "yes",
-      reason: "",
-    },
-    {
-      id: 2,
-      name: "John Doe",
-      house: "Dasatva",
-      attending: "no",
-      reason: "Not feeling well",
-    },
-
-    // Add more participants as needed
-  ]);
+  const [participants, setParticipants] = useState(jsonData);
   const filteredParticipants =
     selectedHouse === "all"
       ? participants
       : participants.filter(
           (participant) =>
-            participant.house.toLowerCase() === selectedHouse.toLowerCase()
+            participant.email.toLowerCase() === selectedHouse.toLowerCase()
         );
 
   return (
@@ -164,31 +149,36 @@ const Yuvako: React.FC = () => {
               onIonChange={handleSearchChange}
             ></IonSearchbar>
           </IonItem>
-          <IonCard color="dark" style={{ width: "95%", height: "100%" }}>
+          <IonCard color="light" style={{ width: "95%", height: "100%" }}>
             <IonCardHeader>
               {/* <IonCardTitle>Card Title</IonCardTitle> */}
               <IonCardSubtitle>Yuvako Details</IonCardSubtitle>
             </IonCardHeader>
+
             <IonCardContent style={{ width: "105%", marginLeft: "-35px" }}>
               {filteredParticipants.length === 0 ? (
-                <div className="no-records-found">No records found.</div>
+                <IonLabel style={{ marginLeft: "30px" }}>
+                  No records found.
+                </IonLabel>
               ) : (
                 <IonGrid className=".card-grid">
                   {filteredParticipants
                     .filter((participant) =>
                       participant.name.toLowerCase().includes(searchQuery)
                     )
-                    .map((participant) => (
-                      <IonRow key={participant.id}>
+                    .map((participant, index) => (
+                      <IonRow key={participant.guid}>
                         <IonCol>
                           <IonCard style={{ width: "100%" }}>
                             <IonItem>
-                              <IonThumbnail slot="start">
+                              <IonAvatar slot="start" className="ion-avatar">
                                 <img
-                                  alt="Silhouette of mountains"
-                                  src="src/images/view.png"
+                                  src={
+                                    "https://picsum.photos/200?random=" + index
+                                  }
+                                  alt="avatar"
                                 />
-                              </IonThumbnail>
+                              </IonAvatar>
                               <IonRow>
                                 <IonCol>
                                   <IonRow style={{ marginTop: "10px" }}>
@@ -200,7 +190,7 @@ const Yuvako: React.FC = () => {
                                   <IonRow style={{ marginTop: "10px" }}>
                                     <IonLabel>House: </IonLabel>
                                     <IonRow>
-                                      <IonLabel> {participant.house} </IonLabel>
+                                      <IonLabel> {participant.email} </IonLabel>
                                     </IonRow>
                                   </IonRow>
                                   <IonRow>
@@ -212,10 +202,10 @@ const Yuvako: React.FC = () => {
                                         <IonSelect
                                           placeholder="Attending?"
                                           aria-label="Attending"
-                                          value={participant.attending}
+                                          // value={participant.attending}
                                           onIonChange={(e) =>
                                             handleAttendingChange(
-                                              participant.id,
+                                              participant.guid,
                                               e.detail.value
                                             )
                                           }
@@ -251,6 +241,7 @@ const Yuvako: React.FC = () => {
                     ))}
                 </IonGrid>
               )}
+
               <IonFab slot="fixed" vertical="bottom" horizontal="end">
                 <IonFabButton onClick={() => setIsOpen(true)}>
                   <IonIcon icon={checkmark}></IonIcon>
