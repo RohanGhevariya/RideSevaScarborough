@@ -43,33 +43,10 @@ const Home: React.FC = () => {
                   >
                     Ride
                   </IonButton>
-
-                  <IonButton className="custom-button" expand="block">
-                    Button 2
-                  </IonButton>
-                  <IonButton className="custom-button" expand="block">
-                    Button 3
-                  </IonButton>
-                  <IonButton className="custom-button" expand="block">
-                    Button 4
-                  </IonButton>
                 </IonCol>
 
                 {/* Right column */}
-                <IonCol size="6" className="column">
-                  <IonButton className="custom-button" expand="block">
-                    Button 5
-                  </IonButton>
-                  <IonButton className="custom-button" expand="block">
-                    Button 6
-                  </IonButton>
-                  <IonButton className="custom-button" expand="block">
-                    Button 7
-                  </IonButton>
-                  <IonButton className="custom-button" expand="block">
-                    Button 8
-                  </IonButton>
-                </IonCol>
+                <IonCol size="6" className="column"></IonCol>
               </IonRow>
             </IonGrid>
             {/* <IonAlert

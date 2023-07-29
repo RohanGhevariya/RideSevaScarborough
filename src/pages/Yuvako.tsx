@@ -1,4 +1,5 @@
 import {
+  IonActionSheet,
   IonAlert,
   IonAvatar,
   IonBackButton,
@@ -12,6 +13,7 @@ import {
   IonCol,
   IonContent,
   IonDatetime,
+  IonDatetimeButton,
   IonFab,
   IonFabButton,
   IonFabList,
@@ -47,6 +49,20 @@ const Yuvako: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHouse, setSelectedHouse] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [responses, setResponses] = useState<string[]>([]);
+  const [showActionSheet, setShowActionSheet] = useState(false);
+
+  const handleResponseSubmission = () => {
+    // Create a new array with the guids of participants who are attending
+    const attendingParticipants = participants
+      .filter((participant) => participant.attending === "yes")
+      .map((participant) => participant.guid);
+
+    // Add the attending participant guids to the responses state
+    setResponses(attendingParticipants);
+
+    setIsOpen(true); // Show the alert
+  };
 
   const handleAttendingChange = (participantId: string, value: string) => {
     setParticipants((prevParticipants) =>
@@ -70,6 +86,18 @@ const Yuvako: React.FC = () => {
       "en-GB"
     );
     setSelectedDate(formattedDate);
+  };
+  const openActionSheet = () => {
+    setShowActionSheet(true);
+  };
+
+  const closeActionSheet = () => {
+    setShowActionSheet(false);
+  };
+
+  const selectDateFromActionSheet = () => {
+    // This function is called when the user selects the "Select Date" option in the action sheet
+    openActionSheet();
   };
 
   const handleHouseChange = (event: CustomEvent<any>) => {
@@ -109,159 +137,181 @@ const Yuvako: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <div className="containerYuvako">
-          <IonItem>
-            <IonLabel>Sabha Date:</IonLabel>
-            {selectedDate ? (
-              <IonLabel>{selectedDate}</IonLabel>
-            ) : (
-              <IonDatetime
-                // Set the desired format
-                value={selectedDate}
-                onIonChange={handleDateChange}
-                cancelText="Cancel" // Set the text for the cancel button
-                doneText="Done" // Set the text for the done button
-                placeholder="Select Date" // Set a placeholder for the input field
-              ></IonDatetime>
-            )}
+      <IonContent className="ion-padding" style={{ background: "#F5EFE7" }}>
+        <IonItem>
+          <IonLabel>Sabha Date:</IonLabel>
+          {selectedDate ? (
+            <IonLabel>{selectedDate}</IonLabel>
+          ) : (
+            <IonLabel onClick={selectDateFromActionSheet}>
+              {/* Display the selected date or the placeholder text */}
+              {selectedDate ? selectedDate : "Select Date"}
+            </IonLabel>
+          )}
+        </IonItem>
+        <IonItem>
+          <IonLabel> House</IonLabel>
+          <IonItem style={{ marginLeft: 10 }}>
+            <IonSelect
+              aria-label="house"
+              value={selectedHouse}
+              onIonChange={handleHouseChange}
+            >
+              <IonSelectOption value="all">All</IonSelectOption>
+              <IonSelectOption value="hariprerit">hariprerit</IonSelectOption>
+              <IonSelectOption value="dasatva">dasatva</IonSelectOption>
+            </IonSelect>
           </IonItem>
-          <IonItem>
-            <IonLabel> House</IonLabel>
-            <IonItem style={{ marginLeft: 10 }}>
-              <IonSelect
-                aria-label="house"
-                value={selectedHouse}
-                onIonChange={handleHouseChange}
-              >
-                <IonSelectOption value="all">All</IonSelectOption>
-                <IonSelectOption value="hariprerit">hariprerit</IonSelectOption>
-                <IonSelectOption value="dasatva">dasatva</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-          </IonItem>
-          <IonItem>
-            <IonSearchbar
-              animated={true}
-              placeholder="Search by name"
-              style={{ padding: 2 }}
-              value={searchQuery}
-              onIonChange={handleSearchChange}
-            ></IonSearchbar>
-          </IonItem>
-          <IonCard color="light" style={{ width: "95%", height: "100%" }}>
-            <IonCardHeader>
-              {/* <IonCardTitle>Card Title</IonCardTitle> */}
-              <IonCardSubtitle>Yuvako Details</IonCardSubtitle>
-            </IonCardHeader>
+        </IonItem>
+        <IonItem>
+          <IonSearchbar
+            animated={true}
+            placeholder="Search by name"
+            style={{ padding: 2 }}
+            value={searchQuery}
+            onIonChange={handleSearchChange}
+          ></IonSearchbar>
+        </IonItem>
+        <IonCard
+          style={{ width: "95%", height: "100%", background: "#F5EFE7" }}
+        >
+          <IonCardHeader>
+            {/* <IonCardTitle>Card Title</IonCardTitle> */}
+            <IonCardSubtitle>Yuvako Details</IonCardSubtitle>
+          </IonCardHeader>
 
-            <IonCardContent style={{ width: "105%", marginLeft: "-35px" }}>
-              {filteredParticipants.length === 0 ? (
-                <IonLabel style={{ marginLeft: "30px" }}>
-                  No records found.
-                </IonLabel>
-              ) : (
-                <IonGrid className=".card-grid">
-                  {filteredParticipants
-                    .filter((participant) =>
-                      participant.name.toLowerCase().includes(searchQuery)
-                    )
-                    .map((participant, index) => (
-                      <IonRow key={participant.guid}>
-                        <IonCol>
-                          <IonCard style={{ width: "100%" }}>
-                            <IonItem>
-                              <IonAvatar slot="start" className="ion-avatar">
-                                <img
-                                  src={
-                                    "https://picsum.photos/200?random=" + index
-                                  }
-                                  alt="avatar"
-                                />
-                              </IonAvatar>
-                              <IonRow>
-                                <IonCol>
-                                  <IonRow style={{ marginTop: "10px" }}>
-                                    <IonLabel>Name:</IonLabel>
-                                    <IonRow>
-                                      <IonLabel> {participant.name}</IonLabel>
-                                    </IonRow>
-                                  </IonRow>
-                                  <IonRow style={{ marginTop: "10px" }}>
-                                    <IonLabel>House: </IonLabel>
-                                    <IonRow>
-                                      <IonLabel> {participant.email} </IonLabel>
-                                    </IonRow>
-                                  </IonRow>
+          <IonCardContent
+            color="light"
+            style={{ width: "105%", marginLeft: "-35px" }}
+          >
+            {filteredParticipants.length === 0 ? (
+              <IonLabel style={{ marginLeft: "30px" }}>
+                No records found.
+              </IonLabel>
+            ) : (
+              <IonGrid className=".card-grid">
+                {filteredParticipants
+                  .filter((participant) =>
+                    participant.name.toLowerCase().includes(searchQuery)
+                  )
+                  .map((participant, index) => (
+                    <IonRow key={participant.guid}>
+                      <IonCol>
+                        <IonCard>
+                          <IonItem>
+                            <IonAvatar slot="start" className="ion-avatar">
+                              <img
+                                src={
+                                  "https://picsum.photos/200?random=" + index
+                                }
+                                alt="avatar"
+                              />
+                            </IonAvatar>
+                            <IonRow>
+                              <IonCol>
+                                <IonRow style={{ marginTop: "10px" }}>
+                                  <IonLabel>Name:</IonLabel>
                                   <IonRow>
-                                    <IonLabel style={{ marginTop: "10px" }}>
-                                      Attending:
-                                    </IonLabel>
-                                    <IonRow>
-                                      <IonItem style={{ marginRight: "5px" }}>
-                                        <IonSelect
-                                          placeholder="Attending?"
-                                          aria-label="Attending"
-                                          // value={participant.attending}
-                                          onIonChange={(e) =>
-                                            handleAttendingChange(
-                                              participant.guid,
-                                              e.detail.value
-                                            )
-                                          }
-                                        >
-                                          <IonSelectOption value="yes">
-                                            Yes
-                                          </IonSelectOption>
-                                          <IonSelectOption value="no">
-                                            No
-                                          </IonSelectOption>
-                                        </IonSelect>
-                                      </IonItem>
-                                    </IonRow>
+                                    <IonLabel> {participant.name}</IonLabel>
                                   </IonRow>
-                                  {participant.attending === "no" && (
-                                    <>
-                                      {/* <IonLabel style={{ marginTop: "10px" }}>
+                                </IonRow>
+                                <IonRow style={{ marginTop: "10px" }}>
+                                  <IonLabel>House: </IonLabel>
+                                  <IonRow>
+                                    <IonLabel> {participant.email} </IonLabel>
+                                  </IonRow>
+                                </IonRow>
+                                <IonRow>
+                                  <IonLabel style={{ marginTop: "10px" }}>
+                                    Attending:
+                                  </IonLabel>
+                                  <IonRow>
+                                    <IonItem style={{ marginRight: "5px" }}>
+                                      <IonSelect
+                                        placeholder="Attending?"
+                                        aria-label="Attending"
+                                        // value={participant.attending}
+                                        onIonChange={(e) =>
+                                          handleAttendingChange(
+                                            participant.guid,
+                                            e.detail.value
+                                          )
+                                        }
+                                      >
+                                        <IonSelectOption value="yes">
+                                          Yes
+                                        </IonSelectOption>
+                                        <IonSelectOption value="no">
+                                          No
+                                        </IonSelectOption>
+                                      </IonSelect>
+                                    </IonItem>
+                                  </IonRow>
+                                </IonRow>
+                                {participant.attending === "no" && (
+                                  <>
+                                    {/* <IonLabel style={{ marginTop: "10px" }}>
                                       Reason:
                                     </IonLabel> */}
-                                      <IonRow>
-                                        <IonItem>
-                                          <IonInput placeholder="Enter reason"></IonInput>
-                                        </IonItem>
-                                      </IonRow>
-                                    </>
-                                  )}
-                                </IonCol>
-                              </IonRow>
-                            </IonItem>
-                          </IonCard>
-                        </IonCol>
-                      </IonRow>
-                    ))}
-                </IonGrid>
-              )}
-
-              <IonFab slot="fixed" vertical="bottom" horizontal="end">
-                <IonFabButton onClick={() => setIsOpen(true)}>
-                  <IonIcon icon={checkmark}></IonIcon>
-                </IonFabButton>
-                <IonAlert
-                  isOpen={isOpen}
-                  header="Alert"
-                  subHeader="Important message"
-                  message="Response is submitted!"
-                  buttons={[{ text: "OK", handler: handleAlertDismiss }]}
-                  onDidDismiss={() => setIsOpen(false)}
-                ></IonAlert>
-              </IonFab>
-            </IonCardContent>
-          </IonCard>
-          <div className="center-content">
-            {/* <IonButton routerLink="/sarthi">Go to Sarthi</IonButton> */}
-          </div>
-        </div>
+                                    <IonRow>
+                                      <IonItem>
+                                        <IonInput placeholder="Enter reason"></IonInput>
+                                      </IonItem>
+                                    </IonRow>
+                                  </>
+                                )}
+                              </IonCol>
+                            </IonRow>
+                          </IonItem>
+                        </IonCard>
+                      </IonCol>
+                    </IonRow>
+                  ))}
+              </IonGrid>
+            )}
+          </IonCardContent>
+        </IonCard>
       </IonContent>
+      <IonFab
+        style={{ marginBottom: "22px", marginRight: "5px" }}
+        slot="fixed"
+        vertical="bottom"
+        horizontal="end"
+      >
+        <IonFabButton onClick={handleResponseSubmission}>
+          <IonIcon icon={checkmark}></IonIcon>
+        </IonFabButton>
+        <IonAlert
+          isOpen={isOpen}
+          header="Alert"
+          subHeader="Important message"
+          message="Response is submitted!"
+          buttons={[{ text: "OK", handler: handleAlertDismiss }]}
+          onDidDismiss={() => setIsOpen(false)}
+        ></IonAlert>
+      </IonFab>
+      <IonActionSheet
+        isOpen={showActionSheet}
+        onDidDismiss={closeActionSheet}
+        buttons={[
+          {
+            text: "Select Date",
+            handler: openActionSheet, // Open the date picker again
+          },
+          {
+            text: "Cancel",
+            role: "cancel",
+          },
+        ]}
+      >
+        <IonDatetime
+          value={selectedDate}
+          onIonChange={handleDateChange}
+          cancelText="Cancel"
+          doneText="Done"
+          placeholder="Select Date"
+        ></IonDatetime>
+      </IonActionSheet>
     </IonPage>
   );
 };

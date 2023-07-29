@@ -77,7 +77,7 @@ const Sarthi: React.FC = () => {
             <IonCardSubtitle>Sarthi Details</IonCardSubtitle>
           </IonCardHeader>
           <IonContent>
-            <IonCardContent style={{ width: "120%", marginLeft: "-50px" }}>
+            <IonCardContent style={{ width: "120%", marginLeft: "-40px" }}>
               <IonGrid className=".card-grid">
                 {sarthis
                   .filter((sarthi) =>
