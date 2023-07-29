@@ -10,6 +10,8 @@ import {
   IonCheckbox,
   IonContent,
   IonHeader,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonItem,
   IonLabel,
   IonList,
@@ -52,8 +54,8 @@ const AssignRide: React.FC = () => {
   const handleYuvakSelection = (yuvakName: string) => {
     // If the participant is already selected, remove them from the list
     if (selectedYuvakos.includes(yuvakName)) {
-      setSelectedYuvakos((prevYuvakName) =>
-        prevYuvakName.filter((name) => name !== yuvakName)
+      setSelectedYuvakos((prevYuvakos) =>
+        prevYuvakos.filter((name) => name !== yuvakName)
       );
     } else {
       // If the participant is not selected, add them to the list
@@ -148,14 +150,16 @@ const AssignRide: React.FC = () => {
             <IonCardSubtitle>Sarthi Name : {selectedSarthi}</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
-            <IonList>
-              {/* Display the selected Yuvakos' names inside the Sarthi box */}
-              {selectedYuvakos.map((yuvakName) => (
-                <IonItem key={yuvakName}>
-                  <IonLabel>{yuvakName}</IonLabel>
-                </IonItem>
-              ))}
-            </IonList>
+            <IonInfiniteScroll>
+              <IonList>
+                {/* Display the selected Yuvakos' names inside the Sarthi box */}
+                {selectedYuvakos.map((yuvakName) => (
+                  <IonItem key={yuvakName}>
+                    <IonLabel>{yuvakName}</IonLabel>
+                  </IonItem>
+                ))}
+              </IonList>
+            </IonInfiniteScroll>
           </IonCardContent>
         </IonCard>
         <IonCard>

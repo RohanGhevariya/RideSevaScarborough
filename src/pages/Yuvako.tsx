@@ -167,14 +167,12 @@ const Yuvako: React.FC = () => {
           <IonSearchbar
             animated={true}
             placeholder="Search by name"
-            style={{ padding: 2 }}
+            style={{ padding: 2, backgroung: "#ffffff" }}
             value={searchQuery}
             onIonChange={handleSearchChange}
           ></IonSearchbar>
         </IonItem>
-        <IonCard
-          style={{ width: "95%", height: "100%", background: "#F5EFE7" }}
-        >
+        <IonCard style={{ width: "95%", height: "100%" }}>
           <IonCardHeader>
             {/* <IonCardTitle>Card Title</IonCardTitle> */}
             <IonCardSubtitle>Yuvako Details</IonCardSubtitle>
