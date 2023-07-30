@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonPage,
   IonHeader,
@@ -23,15 +23,37 @@ import {
   IonBackButton,
   IonButtons,
   IonAvatar,
+  IonAlert,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from "@ionic/react";
 
 import fakeData from "../assets/fakeData.json";
-import { key } from "ionicons/icons";
+import { checkmark, key } from "ionicons/icons";
 
 const Sarthi: React.FC = () => {
-  const [sarthis, setSarthis] = useState(fakeData);
+  const [sarthis, setSarthis] = useState(
+    fakeData.map((sarthi) => ({ ...sarthi, selectedTime: "" }))
+  );
   const [selectedTime, setSelectedTime] = useState<string | undefined>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("all");
+  const [responses, setResponses] = useState<string[]>([]);
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleResponseSubmission = () => {
+    // Create a new array with the guids of participants who are attending
+    const attendingSarthis = sarthis
+      .filter((sarthi) => sarthi.attending === "yes")
+      .map((sarthis) => sarthis.guid);
+
+    // Add the attending participant guids to the responses state
+    setResponses(attendingSarthis);
+
+    setIsOpen(true); // Show the alert
+  };
 
   const handleSearchChange = (event: CustomEvent<any>) => {
     const query = event.detail.value || "";
@@ -47,6 +69,30 @@ const Sarthi: React.FC = () => {
         sarthi.guid === sarthiId ? { ...sarthi, attending: value } : sarthi
       )
     );
+  };
+
+  const handleTimeSlotChange = (event: CustomEvent<any>) => {
+    setSelectedTimeSlot(event.detail.value);
+  };
+  useEffect(() => {
+    // Extract unique time slots from the data
+    const uniqueTimeSlots = Array.from(
+      new Set(fakeData.map((sarthi) => sarthi.time))
+    );
+    setTimeSlots(uniqueTimeSlots);
+  }, []);
+
+  const handleSarthiTimeChange = (sarthiId: string, value: string) => {
+    setSarthis((prevSarthis) =>
+      prevSarthis.map((sarthi) =>
+        sarthi.guid === sarthiId ? { ...sarthi, selectedTime: value } : sarthi
+      )
+    );
+  };
+
+  const handleAlertDismiss = () => {
+    setIsOpen(false);
+    window.location.reload(); // Reload the page
   };
 
   return (
@@ -105,12 +151,13 @@ const Sarthi: React.FC = () => {
                                   <IonLabel>House: {sarthi.email}</IonLabel>
                                 </IonRow>
                                 <IonRow>
-                                  <IonLabel style={{ marginTop: "10px" }}>
+                                  <IonLabel style={{ marginTop: "15px" }}>
                                     Attending:
                                   </IonLabel>
                                   <IonRow>
                                     <IonItem style={{ marginRight: "5px" }}>
                                       <IonSelect
+                                        placeholder="Select Availability"
                                         aria-label="Attending"
                                         value={sarthi.attending}
                                         onIonChange={(e) =>
@@ -145,13 +192,42 @@ const Sarthi: React.FC = () => {
                                 )}
                                 <IonRow style={{ marginTop: "0px" }}>
                                   <IonLabel style={{ marginTop: "10px" }}>
-                                    Space: {sarthi.date}
+                                    Space:
                                   </IonLabel>
+                                  <IonItem style={{ margin: "10px" }}>
+                                    <IonInput>{sarthi.date}</IonInput>
+                                  </IonItem>
                                 </IonRow>
                                 <IonRow>
-                                  <IonLabel style={{ marginTop: "10px" }}>
-                                    Time: {sarthi.time}{" "}
+                                  <IonLabel style={{ marginTop: "15px" }}>
+                                    Time:{" "}
                                   </IonLabel>
+                                  <IonItem style={{ marginLeft: 10 }}>
+                                    <IonSelect
+                                      placeholder="Select Time"
+                                      title="Time"
+                                      aria-label="TimeSlot"
+                                      value={sarthi.selectedTime}
+                                      onIonChange={(e) =>
+                                        handleSarthiTimeChange(
+                                          sarthi.guid,
+                                          e.detail.value
+                                        )
+                                      }
+                                    >
+                                      {/* Display IonSelectOptions for each time slot */}
+
+                                      {timeSlots.map((timeSlot) => (
+                                        <IonSelectOption
+                                          key={timeSlot}
+                                          value={timeSlot}
+                                        >
+                                          {timeSlot}
+                                        </IonSelectOption>
+                                      ))}
+                                    </IonSelect>
+                                  </IonItem>
+
                                   <IonRow
                                     style={{ marginLeft: "10px" }}
                                   ></IonRow>
@@ -168,6 +244,24 @@ const Sarthi: React.FC = () => {
           </IonContent>
         </IonCard>
       </IonContent>
+      <IonFab
+        style={{ marginBottom: "22px", marginRight: "5px" }}
+        slot="fixed"
+        vertical="bottom"
+        horizontal="end"
+      >
+        <IonFabButton onClick={handleResponseSubmission}>
+          <IonIcon icon={checkmark}></IonIcon>
+        </IonFabButton>
+        <IonAlert
+          isOpen={isOpen}
+          header="Alert"
+          subHeader="Important message"
+          message="Response is submitted!"
+          buttons={[{ text: "OK", handler: handleAlertDismiss }]}
+          onDidDismiss={() => setIsOpen(false)}
+        ></IonAlert>
+      </IonFab>
     </IonPage>
   );
 };
