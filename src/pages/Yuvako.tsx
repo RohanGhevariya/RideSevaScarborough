@@ -137,7 +137,7 @@ const Yuvako: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding" style={{ background: "#F5EFE7" }}>
+      <IonContent className="ion-padding">
         <IonItem>
           <IonLabel>Sabha Date:</IonLabel>
           {selectedDate ? (
@@ -172,21 +172,16 @@ const Yuvako: React.FC = () => {
             onIonChange={handleSearchChange}
           ></IonSearchbar>
         </IonItem>
-        <IonCard style={{ width: "95%", height: "100%" }}>
+        <IonCard color="dark" style={{ width: "95%", height: "100%" }}>
           <IonCardHeader>
             {/* <IonCardTitle>Card Title</IonCardTitle> */}
             <IonCardSubtitle>Yuvako Details</IonCardSubtitle>
           </IonCardHeader>
-
-          <IonCardContent
-            color="light"
-            style={{ width: "105%", marginLeft: "-35px" }}
-          >
-            {filteredParticipants.length === 0 ? (
-              <IonLabel style={{ marginLeft: "30px" }}>
-                No records found.
-              </IonLabel>
-            ) : (
+          <IonContent>
+            <IonCardContent
+              color="light"
+              style={{ width: "105%", marginLeft: "-35px" }}
+            >
               <IonGrid className=".card-grid">
                 {filteredParticipants
                   .filter((participant) =>
@@ -195,7 +190,7 @@ const Yuvako: React.FC = () => {
                   .map((participant, index) => (
                     <IonRow key={participant.guid}>
                       <IonCol>
-                        <IonCard>
+                        <IonCard style={{ width: "105%", marginLeft: "18px" }}>
                           <IonItem>
                             <IonAvatar slot="start" className="ion-avatar">
                               <img
@@ -266,8 +261,8 @@ const Yuvako: React.FC = () => {
                     </IonRow>
                   ))}
               </IonGrid>
-            )}
-          </IonCardContent>
+            </IonCardContent>
+          </IonContent>
         </IonCard>
       </IonContent>
       <IonFab
@@ -308,6 +303,7 @@ const Yuvako: React.FC = () => {
           cancelText="Cancel"
           doneText="Done"
           placeholder="Select Date"
+          style={{ color: "#000000" }}
         ></IonDatetime>
       </IonActionSheet>
     </IonPage>

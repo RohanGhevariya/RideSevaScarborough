@@ -149,6 +149,7 @@ const AssignRide: React.FC = () => {
             <IonCardTitle>Sarthi</IonCardTitle>
             <IonCardSubtitle>Sarthi Name : {selectedSarthi}</IonCardSubtitle>
           </IonCardHeader>
+
           <IonCardContent>
             <IonInfiniteScroll>
               <IonList>
@@ -167,6 +168,7 @@ const AssignRide: React.FC = () => {
             <IonCardTitle>Yuvako</IonCardTitle>
             <IonCardSubtitle>{selectedHouse}</IonCardSubtitle>
           </IonCardHeader>
+
           <IonCardContent>
             {filteredParticipants.length === 0 ? (
               <IonLabel style={{ marginLeft: "30px" }}>

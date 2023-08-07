@@ -117,13 +117,19 @@ const Sarthi: React.FC = () => {
         </IonItem>
         <IonCard
           color="dark"
-          style={{ width: "95%", height: "100%", marginLeft: "7px" }}
+          style={{ width: "99%", height: "100%", marginLeft: "0px" }}
         >
           <IonCardHeader>
             <IonCardSubtitle>Sarthi Details</IonCardSubtitle>
           </IonCardHeader>
           <IonContent>
-            <IonCardContent style={{ width: "120%", marginLeft: "-40px" }}>
+            <IonCardContent
+              style={{
+                width: "115%",
+                marginLeft: "-30px",
+                marginTop: "-5px",
+              }}
+            >
               <IonGrid className=".card-grid">
                 {sarthis
                   .filter((sarthi) =>
@@ -132,7 +138,7 @@ const Sarthi: React.FC = () => {
                   .map((sarthi, index) => (
                     <IonRow key={sarthi.guid}>
                       <IonCol>
-                        <IonCard style={{ width: "100%" }}>
+                        <IonCard style={{ width: "100%", marginLeft: "5px" }}>
                           <IonItem>
                             <IonAvatar slot="start" className="ion-avatar">
                               <img
@@ -186,16 +192,24 @@ const Sarthi: React.FC = () => {
                                 {sarthi.attending === "no" && (
                                   <IonRow>
                                     <IonItem>
-                                      <IonInput placeholder="Enter reason"></IonInput>
+                                      <IonInput
+                                        style={{ marginLeft: "-1px" }}
+                                        placeholder="Enter reason"
+                                      ></IonInput>
                                     </IonItem>
                                   </IonRow>
                                 )}
                                 <IonRow style={{ marginTop: "0px" }}>
-                                  <IonLabel style={{ marginTop: "10px" }}>
+                                  <IonLabel style={{ marginTop: "15px" }}>
                                     Space:
                                   </IonLabel>
-                                  <IonItem style={{ margin: "10px" }}>
-                                    <IonInput>{sarthi.date}</IonInput>
+                                  <IonItem>
+                                    <IonInput
+                                      style={{ width: "50px", height: "10px" }}
+                                      type="number"
+                                      inputMode="numeric"
+                                      placeholder="Space"
+                                    ></IonInput>
                                   </IonItem>
                                 </IonRow>
                                 <IonRow>
