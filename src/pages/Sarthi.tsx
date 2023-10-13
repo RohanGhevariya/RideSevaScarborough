@@ -46,7 +46,7 @@ const Sarthi: React.FC = () => {
   const handleResponseSubmission = () => {
     // Create a new array with the guids of participants who are attending
     const attendingSarthis = sarthis
-      .filter((sarthi) => sarthi.attending === "yes")
+      .filter((sarthi) => sarthi.car === "no")
       .map((sarthis) => sarthis.guid);
 
     // Add the attending participant guids to the responses state
@@ -132,6 +132,9 @@ const Sarthi: React.FC = () => {
             >
               <IonGrid className=".card-grid">
                 {sarthis
+                  .filter((sarthi) => {
+                    return sarthi.car === "yes";
+                  })
                   .filter((sarthi) =>
                     sarthi.name.toLowerCase().includes(searchQuery)
                   )
@@ -154,7 +157,7 @@ const Sarthi: React.FC = () => {
                                   <IonLabel>Name: {sarthi.name}</IonLabel>
                                 </IonRow>
                                 <IonRow style={{ marginTop: "10px" }}>
-                                  <IonLabel>House: {sarthi.email}</IonLabel>
+                                  <IonLabel>House: {sarthi.houseName}</IonLabel>
                                 </IonRow>
                                 <IonRow>
                                   <IonLabel style={{ marginTop: "15px" }}>

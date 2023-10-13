@@ -68,7 +68,10 @@ const AssignRide: React.FC = () => {
   };
 
   const attendingSarthis = fakeData.filter(
-    (sarthis) => sarthis.attending === "yes"
+    (sarthis) => sarthis.attending === "yes" && sarthis.car === "yes"
+  );
+  const attendingYuvakos = fakeData.filter(
+    (yuvakos) => yuvakos.attending === "yes"
   );
 
   const filteredParticipants =
@@ -81,9 +84,11 @@ const AssignRide: React.FC = () => {
       ? participants
       : participants.filter(
           (participant) =>
-            participant.email.toLowerCase() === selectedHouse.toLowerCase()
+            participant.houseName.toLowerCase() === selectedHouse.toLowerCase()
         );
-
+  const uniqueHouseNames = Array.from(
+    new Set(fakeData.map((participant) => participant.houseName))
+  );
   return (
     <IonPage>
       <IonHeader>
@@ -104,8 +109,11 @@ const AssignRide: React.FC = () => {
               onIonChange={handleHouseChange}
             >
               <IonSelectOption value="all">All</IonSelectOption>
-              <IonSelectOption value="hariprerit">Hariprerit</IonSelectOption>
-              <IonSelectOption value="dasatva">Dasatva</IonSelectOption>
+              {uniqueHouseNames.map((houseName) => (
+                <IonSelectOption key={houseName} value={houseName}>
+                  {houseName}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
         </IonItem>
@@ -176,26 +184,30 @@ const AssignRide: React.FC = () => {
               </IonLabel>
             ) : (
               <IonList>
-                {filteredHouse.map((yuvak) => (
-                  <IonCard style={{ margin: "0px" }}>
-                    <IonCardContent>
-                      <IonList>
-                        <IonItem>
-                          <IonLabel>
-                            <IonCheckbox
-                              checked={selectedYuvakos.includes(yuvak.name)}
-                              onIonChange={() =>
-                                handleYuvakSelection(yuvak.name)
-                              }
-                            >
-                              {yuvak.name}
-                            </IonCheckbox>
-                          </IonLabel>
-                        </IonItem>
-                      </IonList>
-                    </IonCardContent>
-                  </IonCard>
-                ))}
+                {filteredHouse.map(
+                  (yuvak) =>
+                    // Additional filter for Yuvakos who are attending
+                    yuvak.attending === "yes" && (
+                      <IonCard style={{ margin: "0px" }} key={yuvak.guid}>
+                        <IonCardContent>
+                          <IonList>
+                            <IonItem>
+                              <IonLabel>
+                                <IonCheckbox
+                                  checked={selectedYuvakos.includes(yuvak.name)}
+                                  onIonChange={() =>
+                                    handleYuvakSelection(yuvak.name)
+                                  }
+                                >
+                                  {yuvak.name}
+                                </IonCheckbox>
+                              </IonLabel>
+                            </IonItem>
+                          </IonList>
+                        </IonCardContent>
+                      </IonCard>
+                    )
+                )}
               </IonList>
             )}
             <IonButton

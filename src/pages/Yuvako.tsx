@@ -37,6 +37,7 @@ import React, { useState } from "react";
 import "./Yuvako.css";
 import { checkmark } from "ionicons/icons";
 import { useEffect } from "react";
+import { useHistory } from "react-router";
 import jsonData from "../assets/fakeData.json";
 
 const alertHandle = () => {
@@ -44,6 +45,7 @@ const alertHandle = () => {
 };
 
 const Yuvako: React.FC = () => {
+  const history = useHistory();
   const [attendingValue, setAttendingValue] = useState("yes");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
@@ -57,7 +59,7 @@ const Yuvako: React.FC = () => {
     const attendingParticipants = participants
       .filter((participant) => participant.attending === "yes")
       .map((participant) => participant.guid);
-
+    history.push("/assignRide", { attendingParticipants });
     // Add the attending participant guids to the responses state
     setResponses(attendingParticipants);
 
@@ -115,8 +117,11 @@ const Yuvako: React.FC = () => {
       ? participants
       : participants.filter(
           (participant) =>
-            participant.email.toLowerCase() === selectedHouse.toLowerCase()
+            participant.houseName.toLowerCase() === selectedHouse.toLowerCase()
         );
+  const uniqueHouseNames = Array.from(
+    new Set(jsonData.map((participant) => participant.houseName))
+  );
 
   return (
     <IonPage>
@@ -158,8 +163,12 @@ const Yuvako: React.FC = () => {
               onIonChange={handleHouseChange}
             >
               <IonSelectOption value="all">All</IonSelectOption>
-              <IonSelectOption value="hariprerit">hariprerit</IonSelectOption>
-              <IonSelectOption value="dasatva">dasatva</IonSelectOption>
+
+              {uniqueHouseNames.map((houseName) => (
+                <IonSelectOption key={houseName} value={houseName}>
+                  {houseName}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
         </IonItem>
@@ -211,7 +220,10 @@ const Yuvako: React.FC = () => {
                                 <IonRow style={{ marginTop: "10px" }}>
                                   <IonLabel>House: </IonLabel>
                                   <IonRow>
-                                    <IonLabel> {participant.email} </IonLabel>
+                                    <IonLabel>
+                                      {" "}
+                                      {participant.houseName}{" "}
+                                    </IonLabel>
                                   </IonRow>
                                 </IonRow>
                                 <IonRow>
