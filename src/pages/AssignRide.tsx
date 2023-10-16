@@ -1,4 +1,5 @@
 import {
+  IonAlert,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -27,17 +28,30 @@ import fakeData from "../assets/fakeData.json";
 
 const AssignRide: React.FC = () => {
   const [selectedHouse, setSelectedHouse] = useState<string>("all");
-  const [selectedSarthi, setSelectedSarthi] = useState<string>("all"); // State variable to keep track of the selected house
+  const [selectedSarthi, setSelectedSarthi] = useState<string>("all");
+  const [attendingSarthi, setAttendingSarthi] = useState<string>(""); // Specify the type as string
+  // State variable to keep track of the selected house
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("all");
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [participants, setParticipants] = useState(fakeData);
   const [selectedYuvakos, setSelectedYuvakos] = useState<string[]>([]);
+  const [sarthiCarSpace, setSarthiCarSpace] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleHouseChange = (event: CustomEvent<any>) => {
     setSelectedHouse(event.detail.value); // Update the state with the selected value
   };
   const handleSarthiChange = (event: CustomEvent<any>) => {
-    setSelectedSarthi(event.detail.value); // Update the state with the selected value
+    const selectedSarthiName = event.detail.value;
+    setSelectedSarthi(selectedSarthiName);
+
+    // Find the Sarthi's car space based on the selected Sarthi's name
+    const selectedSarthi = attendingSarthis.find(
+      (sarthis) => sarthis.name === selectedSarthiName
+    );
+
+    // Set the Sarthi's car space or 0 if the Sarthi is not found
+    setSarthiCarSpace(selectedSarthi ? selectedSarthi.carSpace : 0);
   };
   const handleTimeSlotChange = (event: CustomEvent<any>) => {
     setSelectedTimeSlot(event.detail.value);
@@ -52,14 +66,30 @@ const AssignRide: React.FC = () => {
   }, []);
 
   const handleYuvakSelection = (yuvakName: string) => {
-    // If the participant is already selected, remove them from the list
-    if (selectedYuvakos.includes(yuvakName)) {
-      setSelectedYuvakos((prevYuvakos) =>
-        prevYuvakos.filter((name) => name !== yuvakName)
-      );
+    // Calculate the total number of Yuvakos selected
+    const totalSelectedYuvakos = selectedYuvakos.length;
+
+    // Find the selected Sarthi
+    const attendingSarthi = attendingSarthis.find(
+      (sarthi) => sarthi.name === selectedSarthi
+    );
+
+    if (!attendingSarthi) {
+      return; // Sarthi not found, handle this case accordingly
+    }
+
+    if (totalSelectedYuvakos >= attendingSarthi.carSpace) {
+      // Show an alert if the total selected Yuvakos exceed the car space
+      setIsOpen(true);
     } else {
-      // If the participant is not selected, add them to the list
-      setSelectedYuvakos((prevYuvakos) => [...prevYuvakos, yuvakName]);
+      // If not exceeding the car space, toggle the selection
+      if (selectedYuvakos.includes(yuvakName)) {
+        setSelectedYuvakos((prevYuvakos) =>
+          prevYuvakos.filter((name) => name !== yuvakName)
+        );
+      } else {
+        setSelectedYuvakos((prevYuvakos) => [...prevYuvakos, yuvakName]);
+      }
     }
   };
   const handleAssignButtonClick = () => {
@@ -220,6 +250,21 @@ const AssignRide: React.FC = () => {
             </IonButton>
           </IonCardContent>
         </IonCard>
+        <IonAlert
+          isOpen={isOpen}
+          onDidDismiss={() => setIsOpen(false)} // Close the alert when done
+          header="Alert"
+          subHeader="Exceeded Car Space"
+          message="You have selected more Yuvakos than the available car space."
+          buttons={[
+            {
+              text: "OK",
+              handler: () => {
+                setIsOpen(false); // Close the alert when OK is pressed
+              },
+            },
+          ]}
+        />
       </IonContent>
     </IonPage>
   );

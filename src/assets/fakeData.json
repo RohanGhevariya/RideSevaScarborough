@@ -5,7 +5,8 @@
 		"attending": "yes",
 		"houseName": "hariprerit",
 		"time": "5:20 PM",
-		"car":"no"
+		"car":"no",
+		"carSpace": 0
 	},
 	{
 		"guid": "5E42D03A-FBD5-70CA-CB66-B38A9EBB88E9",
@@ -13,7 +14,8 @@
 		"attending": "yes",
 		"houseName": "hariprerit",
 		"time": "5:20 PM",
-		"car":"yes"
+		"car":"yes",
+		"carSpace": 4
 	},
 	{
 		"guid": "37DA41A3-8312-76A3-9163-795CB54A7AA3",
@@ -21,7 +23,8 @@
 		"attending": "yes",
 		"houseName": "suhadvihar",
 		"time": "5:15 PM",
-		"car":"no"
+		"car":"no",
+		"carSpace": 0
 	},
 	{
 		"guid": "DC469C6D-AD23-7540-98CD-CF7D7A16D358",
@@ -29,7 +32,8 @@
 		"attending": "yes",
 		"houseName": "dasatva",
 		"time": "5:20 PM",
-		"car":"yes"
+		"car":"yes",
+		"carSpace":3
 	},
 	{
 		"guid": "87BE930C-797E-6D8A-0692-81CAF7767DBF",
@@ -37,7 +41,8 @@
 		"attending": "no",
 		"houseName": "hariprerit",
 		"time": "10:10 PM",
-		"car":"no"
+		"car":"no",
+		"carSpace": 0
 	},
 	{
 		"guid": "359BCBE7-2BD5-7E92-A267-08C5D5DADBD6",
@@ -45,6 +50,7 @@
 		"attending": "no",
 		"houseName": "dasatva",
 		"time": "5:20 PM",
-		"car":"yes"
+		"car":"yes",
+		"carSpace": 0
 	}
 ]
